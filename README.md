@@ -52,9 +52,10 @@ principal, então a captura em 1080/0.95 dá uma pequena engasgada na tela.
 
 ### Print
 
-![Galeria com as fotos em 1080 px / 0.95](docs/img/4.2-galeria.png)
+![Galeria com as fotos em 1080 px / 0.95](docs/img/galeria-legenda-e-contador.jpg)
 
-> _Substitua o arquivo `docs/img/4.2-galeria.png` pelo seu print._
+> Galeria com 4 fotos tiradas em 1080 px / 0.95. O título já mostra o contador do
+> item 4.4 e uma das fotos tem legenda.
 
 ---
 
@@ -90,9 +91,12 @@ legenda.textContent = foto.legenda || foto.data; // fotos antigas mostram a data
 
 ### Print
 
-![Prompt pedindo a legenda](docs/img/4.3-prompt.png)
+![Legenda "PC na minha frente" aparecendo na galeria](docs/img/galeria-legenda-e-contador.jpg)
 
-![Galeria mostrando as legendas](docs/img/4.3-galeria.png)
+> A foto mais nova mostra a legenda digitada no `prompt`. As fotos tiradas antes da
+> alteração continuam exibindo a data (fallback `foto.legenda || foto.data`).
+>
+> O print da caixa `prompt("Legenda da foto:")` aberta não foi capturado.
 
 ---
 
@@ -115,7 +119,12 @@ uma foto e ao cancelar a legenda (nesse caso o número não muda).
 
 ### Print
 
-![Título com o contador de fotos](docs/img/4.4-contador.png)
+| Antes (versão anterior) | Depois (com contador) |
+|---|---|
+| ![Título apenas "Galeria"](docs/img/galeria-antes-sem-contador.jpg) | ![Título "Galeria (4)"](docs/img/galeria-legenda-e-contador.jpg) |
+
+> No print da esquerda o título é só **"Galeria"** (e a câmera está sem permissão).
+> No da direita aparece **"Galeria (4)"** com as 4 fotos salvas.
 
 ---
 
