@@ -12,6 +12,7 @@ const btnFoto = document.querySelector("#btn-foto");
 const btnTrocarCamera = document.querySelector("#btn-trocar-camera");
 const inputFoto = document.querySelector("#input-foto");
 const galeria = document.querySelector("#galeria");
+const tituloGaleria = document.querySelector("#titulo-galeria");
 
 let stream = null;                 // a "transmissão" da câmera ligada
 let cameraAtual = "environment";   // "environment" = traseira, "user" = frontal
@@ -107,9 +108,17 @@ function salvarFotos() {
 }
 
 // Desenha uma imagem (do vídeo ou de um arquivo) no canvas, já reduzida,
-// e guarda o resultado na galeria
+// e guarda o resultado na galeria.
+// Retorna true se salvou e false se o usuário cancelar a legenda.
 function guardarImagem(fonte, larguraOriginal, alturaOriginal) {
-  const largura = 480; // reduzimos para não lotar o armazenamento
+  // Pede a legenda ANTES de salvar. prompt() devolve null quando o usuário cancela.
+  const resposta = prompt("Legenda da foto:");
+  if (resposta === null) {
+    return false; // cancelou: não salva nada
+  }
+  const legenda = resposta.trim() || "Sem legenda";
+
+  const largura = 1080; // reduzimos para não lotar o armazenamento
   const altura = Math.round((alturaOriginal / larguraOriginal) * largura);
   canvas.width = largura;
   canvas.height = altura;
@@ -118,21 +127,28 @@ function guardarImagem(fonte, larguraOriginal, alturaOriginal) {
   contexto.drawImage(fonte, 0, 0, largura, altura);
 
   // Transforma o desenho em texto (base64) no formato JPEG, qualidade 70%
-  const imagem = canvas.toDataURL("image/jpeg", 0.7);
+  const imagem = canvas.toDataURL("image/jpeg", 0.95);
 
-  fotos.unshift({ imagem: imagem, data: new Date().toLocaleString("pt-BR") }); // unshift = coloca no começo
+  fotos.unshift({
+    imagem: imagem,
+    legenda: legenda,
+    data: new Date().toLocaleString("pt-BR")
+  }); // unshift = coloca no começo
   if (fotos.length > 12) {
     fotos.pop(); // guardamos no máximo 12 fotos
   }
   salvarFotos();
   mostrarGaleria();
+  return true;
 }
 
 function tirarFoto() {
   if (!stream) {
     return;
   }
-  guardarImagem(video, video.videoWidth, video.videoHeight);
+  if (!guardarImagem(video, video.videoWidth, video.videoHeight)) {
+    return; // cancelou a legenda: não faz flash nem aviso
+  }
 
   // Efeito de flash + vibração, como uma câmera de verdade
   areaCamera.classList.remove("flash");
@@ -152,15 +168,20 @@ inputFoto.addEventListener("change", function () {
   }
   const img = new Image();
   img.onload = function () {
-    guardarImagem(img, img.naturalWidth, img.naturalHeight);
+    const salvou = guardarImagem(img, img.naturalWidth, img.naturalHeight);
     URL.revokeObjectURL(img.src);
-    mostrarAviso("📸 Foto salva na galeria");
+    if (salvou) {
+      mostrarAviso("📸 Foto salva na galeria");
+    }
   };
   img.src = URL.createObjectURL(arquivo);
   inputFoto.value = ""; // permite escolher a mesma foto de novo
 });
 
 function mostrarGaleria() {
+  // 4.4 - contador ao lado do título: "Galeria (5)"
+  tituloGaleria.textContent = "Galeria (" + fotos.length + ")";
+
   galeria.innerHTML = "";
   if (fotos.length === 0) {
     galeria.innerHTML = '<p class="vazio">Nenhuma foto ainda.</p>';
@@ -169,10 +190,18 @@ function mostrarGaleria() {
   for (const foto of fotos) {
     const div = document.createElement("div");
     div.className = "foto";
-    div.innerHTML = `
-      <img src="${foto.imagem}" alt="Foto do meu café">
-      <small>${foto.data}</small>
-    `;
+
+    const img = document.createElement("img");
+    img.src = foto.imagem;
+    img.alt = "Foto do meu café";
+
+    const legenda = document.createElement("small");
+    // 4.3 - mostra a legenda no lugar da data.
+    // Fotos antigas (sem legenda) continuam mostrando a data.
+    legenda.textContent = foto.legenda || foto.data;
+
+    div.appendChild(img);
+    div.appendChild(legenda);
     galeria.appendChild(div);
   }
 }
