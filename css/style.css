@@ -4,48 +4,9 @@
    ========================================================== */
 
 /* Variáveis de cor: mude aqui para personalizar o app inteiro.
-   O modo escuro redefine estas mesmas variáveis mais abaixo. */
+   PADRÃO = ESCURO. O claro só é aplicado se a pessoa escolher no botão. */
 :root {
-  --cor-principal: #6f4e37;      /* marrom café */
-  --cor-destaque: #d4a373;       /* caramelo */
-  --cor-fundo: #fff8f0;          /* creme */
-  --cor-card: #ffffff;
-  --cor-texto: #2b2118;
-  --cor-texto-suave: #7a6a5c;
-  --cor-borda: #eadfd3;
-  --cor-topo-fundo: var(--cor-principal);
-  --cor-topo-texto: #fff;
-  --cor-botao-texto: #fff;       /* texto sobre botões preenchidos */
-  --cor-aba-fundo: #fff;
-  --cor-camera-fundo: #1e1e1e;
-  --cor-contador: #c0392b;
-  --raio: 14px;
-  --sombra: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-/* Sem JavaScript, o app já respeita o sistema operacional */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-tema="claro"]) {
-    --cor-principal: #d4a373;
-    --cor-destaque: #e6bd90;
-    --cor-fundo: #17120f;
-    --cor-card: #241d18;
-    --cor-texto: #f5ece1;
-    --cor-texto-suave: #b8a694;
-    --cor-borda: #3b2f27;
-    --cor-topo-fundo: #241a14;
-    --cor-topo-texto: #f5ece1;
-    --cor-botao-texto: #1a1310;
-    --cor-aba-fundo: #1c1612;
-    --cor-camera-fundo: #0e0b09;
-    --cor-contador: #e74c3c;
-    --sombra: 0 2px 10px rgba(0, 0, 0, 0.4);
-  }
-}
-
-/* Escolha manual (botão no topo) ou preferência do sistema aplicada pelo tema.js */
-:root[data-tema="escuro"] {
-  --cor-principal: #d4a373;
+  --cor-principal: #d4a373;      /* caramelo */
   --cor-destaque: #e6bd90;
   --cor-fundo: #17120f;
   --cor-card: #241d18;
@@ -54,11 +15,30 @@
   --cor-borda: #3b2f27;
   --cor-topo-fundo: #241a14;
   --cor-topo-texto: #f5ece1;
-  --cor-botao-texto: #1a1310;
+  --cor-botao-texto: #1a1310;    /* texto sobre botões preenchidos */
   --cor-aba-fundo: #1c1612;
   --cor-camera-fundo: #0e0b09;
   --cor-contador: #e74c3c;
+  --raio: 14px;
   --sombra: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Tema claro, apenas quando escolhido manualmente no botão do topo */
+:root[data-tema="claro"] {
+  --cor-principal: #6f4e37;      /* marrom café */
+  --cor-destaque: #d4a373;
+  --cor-fundo: #fff8f0;          /* creme */
+  --cor-card: #ffffff;
+  --cor-texto: #2b2118;
+  --cor-texto-suave: #7a6a5c;
+  --cor-borda: #eadfd3;
+  --cor-topo-fundo: var(--cor-principal);
+  --cor-topo-texto: #fff;
+  --cor-botao-texto: #fff;
+  --cor-aba-fundo: #fff;
+  --cor-camera-fundo: #1e1e1e;
+  --cor-contador: #c0392b;
+  --sombra: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 /* Faz padding e borda contarem dentro da largura */

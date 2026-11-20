@@ -5,7 +5,9 @@
 // nas próximas aberturas (inclusive a volta ao claro).
 // ==========================================================
 
-const CHAVE_TEMA = "tema";
+// Chave nova: ignora qualquer escolha antiga guardada no aparelho
+const CHAVE_TEMA = "tema-v2";
+try { localStorage.removeItem("tema"); } catch (e) {}
 
 function temaAtual() {
   const salvo = localStorage.getItem(CHAVE_TEMA);

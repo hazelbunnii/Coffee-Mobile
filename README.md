@@ -14,14 +14,14 @@ Aplicativo de cafeteria feito com **HTML, CSS e JavaScript puro**, empacotado co
 
 ## Modo escuro
 
-O app **sempre abre no modo escuro**. O botão de lua/sol no topo permite alternar para o claro; essa escolha fica salva no `localStorage` (chave `tema`) e vale nas próximas aberturas.
+O app **sempre abre no modo escuro**. O botão de lua/sol no topo permite alternar para o claro; essa escolha fica salva no `localStorage` (chave `tema-v2`) e vale nas próximas aberturas.
 
 Por baixo dos panos:
 
 - Um script minúsculo no `<head>` do `index.html` aplica `data-tema="escuro"` antes mesmo do CSS carregar, então não dá tempo de "piscar" a versão clara ao abrir.
 - `js/tema.js` confirma o tema na carga, troca o ícone do botão (sol/lua) e atualiza a meta tag `theme-color` (a cor da barra do navegador/app instalado).
 - `css/style.css` troca um conjunto de variáveis CSS (`--cor-fundo`, `--cor-card`, `--cor-texto`, etc.), então todos os componentes acompanham o tema sem duplicar regras.
-- Como fallback sem JavaScript, a regra `@media (prefers-color-scheme: dark)` também deixa o app escuro.
+- O escuro é o padrão das variáveis em `:root`, então o app já nasce escuro mesmo se o JavaScript falhar. O claro só aparece quando `data-tema="claro"` é aplicado.
 
 ## Ícones
 

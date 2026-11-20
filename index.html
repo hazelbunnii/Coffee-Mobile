@@ -9,7 +9,7 @@
   <script>
     (function () {
       var escolha = null;
-      try { escolha = localStorage.getItem("tema"); } catch (e) {}
+      try { escolha = localStorage.getItem("tema-v2"); } catch (e) {}
       document.documentElement.setAttribute("data-tema", escolha === "claro" ? "claro" : "escuro");
     })();
   </script>
