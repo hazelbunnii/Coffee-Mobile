@@ -3,8 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#6f4e37">
+  <meta name="theme-color" content="#241a14">
   <title>Café Mobile</title>
+  <!-- Aplica o tema antes do CSS carregar: o app já abre escuro, sem piscar claro -->
+  <script>
+    (function () {
+      var escolha = null;
+      try { escolha = localStorage.getItem("tema"); } catch (e) {}
+      document.documentElement.setAttribute("data-tema", escolha === "claro" ? "claro" : "escuro");
+    })();
+  </script>
   <!-- PWA: o manifest descreve o app (nome, ícone, cores) para o celular -->
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icons/icon-192.png">
@@ -19,7 +27,7 @@
     <div class="acoes-topo">
       <!-- Só aparece quando o navegador permite instalar (ver pwa.js) -->
       <button id="btn-instalar" class="btn-instalar" hidden>Instalar</button>
-      <!-- Tema: segue o sistema por padrão e pode ser trocado aqui (ver tema.js) -->
+      <!-- Tema: abre escuro por padrão e pode ser trocado aqui (ver tema.js) -->
       <button id="btn-tema" class="btn-tema" aria-label="Ativar modo escuro" title="Alternar tema"></button>
     </div>
   </header>

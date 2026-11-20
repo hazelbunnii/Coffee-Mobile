@@ -1,24 +1,15 @@
 // ==========================================================
-// tema.js - modo escuro automático + botão para alternar
-// Por padrão segue a preferência do sistema (prefers-color-scheme).
-// Se a pessoa escolher um tema no botão, a escolha é salva e
-// passa a valer também quando o app reabrir.
+// tema.js - modo escuro por padrão + botão para alternar
+// Ao abrir, o app já entra no modo escuro. Se a pessoa tocar
+// no botão do topo, a escolha é salva no localStorage e vale
+// nas próximas aberturas (inclusive a volta ao claro).
 // ==========================================================
 
-const CHAVE_TEMA = "tema"; // "claro", "escuro" ou null = seguir o sistema
-
-const consultaEscuro = window.matchMedia("(prefers-color-scheme: dark)");
-
-function temaDoSistema() {
-  return consultaEscuro.matches ? "escuro" : "claro";
-}
+const CHAVE_TEMA = "tema";
 
 function temaAtual() {
   const salvo = localStorage.getItem(CHAVE_TEMA);
-  if (salvo === "claro" || salvo === "escuro") {
-    return salvo;
-  }
-  return temaDoSistema();
+  return salvo === "claro" ? "claro" : "escuro"; // padrão = escuro
 }
 
 function aplicarTema() {
@@ -49,18 +40,5 @@ document.querySelector("#btn-tema").addEventListener("click", function () {
   localStorage.setItem(CHAVE_TEMA, proximo);
   aplicarTema();
 });
-
-// Se não houve escolha manual, acompanha o sistema em tempo real
-function aoMudarSistema() {
-  if (!localStorage.getItem(CHAVE_TEMA)) {
-    aplicarTema();
-  }
-}
-
-if (consultaEscuro.addEventListener) {
-  consultaEscuro.addEventListener("change", aoMudarSistema);
-} else if (consultaEscuro.addListener) {
-  consultaEscuro.addListener(aoMudarSistema); // iPhones mais antigos
-}
 
 aplicarTema();

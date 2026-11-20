@@ -6,7 +6,7 @@
 // ==========================================================
 
 // Mude o número da versão sempre que alterar a lista de arquivos abaixo
-const CACHE = "cafe-mobile-v2";
+const CACHE = "cafe-mobile-v3";
 
 const ARQUIVOS = [
   "./",

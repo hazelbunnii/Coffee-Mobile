@@ -9,20 +9,19 @@ Aplicativo de cafeteria feito com **HTML, CSS e JavaScript puro**, empacotado co
 - **Meu Café**: câmera frontal e traseira, galeria com até 12 fotos e opção de usar o app de câmera do próprio celular.
 - **Compartilhamento**: usa a Web Share API para pedidos e fotos; quando o aparelho não suporta, copia o texto para a área de transferência.
 - **PWA**: `manifest.json` define nome, ícones e cores; `sw.js` guarda os arquivos no aparelho (estratégia "rede primeiro", com cópia offline).
-- **Modo escuro**: segue automaticamente o tema do sistema e também pode ser alternado manualmente.
+- **Modo escuro**: o app já abre escuro e o botão no topo permite alternar para o claro.
 - **Ícones SVG**: emojis foram substituídos por ícones vetoriais — aparecem iguais em qualquer celular e funcionam offline.
 
 ## Modo escuro
 
-Por padrão, o app segue a preferência do sistema (`prefers-color-scheme`). Se o sistema mudar de tema com o app aberto, a interface acompanha.
-
-O botão de lua/sol no topo permite escolher manualmente. A escolha é salva no `localStorage` (chave `tema`) e passa a valer também quando o app reabrir — inclusive ignorando o sistema, até que você volte a alternar.
+O app **sempre abre no modo escuro**. O botão de lua/sol no topo permite alternar para o claro; essa escolha fica salva no `localStorage` (chave `tema`) e vale nas próximas aberturas.
 
 Por baixo dos panos:
 
-- `js/tema.js` define `data-tema="claro"` ou `data-tema="escuro"` no `<html>` e atualiza a meta tag `theme-color` (a cor da barra do navegador/app instalado).
+- Um script minúsculo no `<head>` do `index.html` aplica `data-tema="escuro"` antes mesmo do CSS carregar, então não dá tempo de "piscar" a versão clara ao abrir.
+- `js/tema.js` confirma o tema na carga, troca o ícone do botão (sol/lua) e atualiza a meta tag `theme-color` (a cor da barra do navegador/app instalado).
 - `css/style.css` troca um conjunto de variáveis CSS (`--cor-fundo`, `--cor-card`, `--cor-texto`, etc.), então todos os componentes acompanham o tema sem duplicar regras.
-- Mesmo com JavaScript desativado, a regra `@media (prefers-color-scheme: dark)` já deixa o app escuro.
+- Como fallback sem JavaScript, a regra `@media (prefers-color-scheme: dark)` também deixa o app escuro.
 
 ## Ícones
 
