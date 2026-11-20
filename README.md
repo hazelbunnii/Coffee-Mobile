@@ -45,6 +45,22 @@ Depois abra `http://localhost:8080` no navegador.
 
 Para testar no celular, publique em HTTPS (o GitHub Pages serve). Com o repo neste endereço, a URL será `https://hazelbunnii.github.io/Coffee-Mobile/` após ativar **Settings → Pages → Deploy from branch → main**.
 
+## Prints
+
+Site:
+
+![Site - 1](docs/img/printcoffee1.jpg)
+
+![Site - 2](docs/img/PrintCoffee2.jpg)
+
+![Site - 3](docs/img/PrintCoffee3.jpg)
+
+App instalado no celular:
+
+![App - 1](docs/img/PrintCoffeeApp1.jpg)
+
+![App - 2](docs/img/PrintCoffeeApp2.jpg)
+
 ## Estrutura
 
 ```
@@ -59,7 +75,5 @@ js/pwa.js           Service Worker, botão Instalar e Web Share
 manifest.json       dados do app para instalação
 sw.js               cache offline (incrementar CACHE ao mudar arquivos)
 icons/              ícones do app nas versões 192, 512 e maskable
-docs/               imagens e anotações das aulas anteriores
+docs/img/           prints do site e do app instalado
 ```
-
-As respostas e anotações do Dia 4 foram mantidas em [docs/LEIA-ME-dia4.md](docs/LEIA-ME-dia4.md).
