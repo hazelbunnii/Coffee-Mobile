@@ -1,5 +1,5 @@
 // ==========================================================
-// app.js - Dia 4: abas, pedido, localStorage e vibração
+// app.js - Dia 5: abas, pedido, localStorage e vibração
 // (a câmera fica em camera.js)
 // ==========================================================
 
@@ -65,13 +65,13 @@ function criarCard(produto) {
   const card = document.createElement("article");
   card.className = "card";
   card.innerHTML = `
-    <div class="card-emoji">${produto.emoji}</div>
+    <div class="card-icone">${icone(produto.icone)}</div>
     <div class="card-info">
       <h3>${produto.nome}</h3>
       <p>${produto.descricao}</p>
       <strong>${formatarPreco(produto.preco)}</strong>
     </div>
-    <button class="btn-adicionar" aria-label="Adicionar ${produto.nome}">+</button>
+    <button class="btn-adicionar" aria-label="Adicionar ${produto.nome}">${icone("mais")}</button>
   `;
   card.querySelector(".btn-adicionar").addEventListener("click", function () {
     adicionarAoPedido(produto);
@@ -133,7 +133,7 @@ function adicionarAoPedido(produto) {
   salvarPedido();
   mostrarPedido();
   vibrar(50); // vibração curtinha
-  mostrarAviso(produto.emoji + " " + produto.nome + " adicionado");
+  mostrarAviso(produto.nome + " adicionado");
 }
 
 // mudanca = +1 ou -1
@@ -201,6 +201,7 @@ function mostrarPedido() {
   contador.hidden = quantidadeTotal === 0;
 
   document.querySelector("#btn-finalizar").disabled = pedido.length === 0;
+  document.querySelector("#btn-compartilhar-pedido").disabled = pedido.length === 0;
 }
 
 function finalizarPedido() {

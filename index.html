@@ -5,12 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#6f4e37">
   <title>Café Mobile</title>
+  <!-- PWA: o manifest descreve o app (nome, ícone, cores) para o celular -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <!-- iPhone não usa os ícones do manifest: precisa desta linha -->
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
   <header class="topo">
-    <h1>☕ Café Mobile</h1>
+    <h1><span data-icone="cafe"></span> Café Mobile</h1>
+    <div class="acoes-topo">
+      <!-- Só aparece quando o navegador permite instalar (ver pwa.js) -->
+      <button id="btn-instalar" class="btn-instalar" hidden>Instalar</button>
+      <!-- Tema: segue o sistema por padrão e pode ser trocado aqui (ver tema.js) -->
+      <button id="btn-tema" class="btn-tema" aria-label="Ativar modo escuro" title="Alternar tema"></button>
+    </div>
   </header>
 
   <main>
@@ -35,6 +46,9 @@
         <strong id="total-pedido">R$ 0,00</strong>
       </div>
       <button id="btn-finalizar" class="btn-principal">Finalizar pedido</button>
+      <button id="btn-compartilhar-pedido" class="btn-secundario">
+        <span data-icone="compartilhar"></span> Compartilhar pedido
+      </button>
     </section>
     <!-- ===== Tela 3: Meu Café (câmera) ===== -->
     <section id="tela-camera" class="tela" hidden>
@@ -45,7 +59,7 @@
       <div id="area-camera" class="area-camera">
         <!-- playsinline: no iPhone, evita abrir o vídeo em tela cheia -->
         <video id="video" autoplay playsinline muted></video>
-        <p class="camera-desligada">📷 Câmera desligada</p>
+        <p class="camera-desligada"><span data-icone="camera"></span> Câmera desligada</p>
       </div>
 
       <!-- Canvas invisível: usado para "congelar" um quadro do vídeo -->
@@ -54,34 +68,39 @@
       <div class="botoes-camera">
         <button id="btn-ligar-camera" class="btn-principal">Ligar câmera</button>
         <button id="btn-foto" class="btn-foto" aria-label="Tirar foto" disabled></button>
-        <button id="btn-trocar-camera" class="btn-secundario" disabled>🔄 Trocar</button>
+        <button id="btn-trocar-camera" class="btn-secundario" disabled>
+          <span data-icone="trocar"></span> Trocar
+        </button>
       </div>
 
       <!-- Jeito mais simples: abre o app de câmera do próprio celular -->
       <label class="btn-secundario btn-arquivo">
-        📁 Usar o app de câmera
+        <span data-icone="imagem"></span> Usar o app de câmera
         <input type="file" id="input-foto" accept="image/*" capture="environment">
       </label>
 
-      <h3 id="titulo-galeria">Galeria (0)</h3>
+      <h3>Galeria</h3>
       <div id="galeria" class="galeria"></div>
     </section>
   </main>
 
   <!-- ===== Barra de abas, fixa embaixo, como nos apps ===== -->
   <nav class="abas">
-    <button class="aba ativa" data-tela="tela-cardapio">☕<span>Cardápio</span></button>
-    <button class="aba" data-tela="tela-pedido">🧾<span>Pedido</span>
+    <button class="aba ativa" data-tela="tela-cardapio"><span data-icone="cafe"></span><span>Cardápio</span></button>
+    <button class="aba" data-tela="tela-pedido"><span data-icone="recibo"></span><span>Pedido</span>
       <span id="contador-pedido" class="contador" hidden>0</span>
     </button>
-    <button class="aba" data-tela="tela-camera">📷<span>Meu Café</span></button>
+    <button class="aba" data-tela="tela-camera"><span data-icone="camera"></span><span>Meu Café</span></button>
   </nav>
 
   <!-- Mensagem rápida que aparece e some (toast) -->
   <div id="aviso" class="aviso" role="status"></div>
 
   <script src="js/dados.js"></script>
+  <script src="js/icones.js"></script>
+  <script src="js/tema.js"></script>
   <script src="js/app.js"></script>
   <script src="js/camera.js"></script>
+  <script src="js/pwa.js"></script>
 </body>
 </html>
