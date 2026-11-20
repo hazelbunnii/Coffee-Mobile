@@ -18,7 +18,8 @@
   <link rel="icon" href="icons/icon-192.png">
   <!-- iPhone não usa os ícones do manifest: precisa desta linha -->
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <link rel="stylesheet" href="css/style.css">
+  <!-- ?v4 força o navegador a buscar o CSS novo, ignorando o cache antigo -->
+  <link rel="stylesheet" href="css/style.css?v4">
 </head>
 <body>
 
@@ -104,11 +105,11 @@
   <!-- Mensagem rápida que aparece e some (toast) -->
   <div id="aviso" class="aviso" role="status"></div>
 
-  <script src="js/dados.js"></script>
-  <script src="js/icones.js"></script>
-  <script src="js/tema.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/camera.js"></script>
-  <script src="js/pwa.js"></script>
+  <script src="js/dados.js?v4"></script>
+  <script src="js/icones.js?v4"></script>
+  <script src="js/tema.js?v4"></script>
+  <script src="js/app.js?v4"></script>
+  <script src="js/camera.js?v4"></script>
+  <script src="js/pwa.js?v4"></script>
 </body>
 </html>
