@@ -1,128 +1,66 @@
-# Dia 4 — Câmera
+# Café Mobile
 
-## 4.1 — Permissão negada
+Aplicativo de cafeteria feito com **HTML, CSS e JavaScript puro**, empacotado como **PWA**: pode ser instalado na tela de início do celular e abre mesmo sem internet.
 
-**Mensagem que o app mostra:** `Você precisa permitir o uso da câmera`
+## Funcionalidades
 
-O aviso aparece por 2 segundos no rodapé da tela, a câmera não liga e o botão de foto
-continua desabilitado. O app identifica o erro pelo nome `NotAllowedError`:
+- **Cardápio**: produtos com filtros por categoria (Todos, Cafés, Geladas, Salgados e Doces).
+- **Pedido**: adicione itens, mude quantidades, veja o total e compartilhe o resumo. O pedido fica salvo no `localStorage`.
+- **Meu Café**: câmera frontal e traseira, galeria com até 12 fotos e opção de usar o app de câmera do próprio celular.
+- **Compartilhamento**: usa a Web Share API para pedidos e fotos; quando o aparelho não suporta, copia o texto para a área de transferência.
+- **PWA**: `manifest.json` define nome, ícones e cores; `sw.js` guarda os arquivos no aparelho (estratégia "rede primeiro", com cópia offline).
+- **Modo escuro**: segue automaticamente o tema do sistema e também pode ser alternado manualmente.
+- **Ícones SVG**: emojis foram substituídos por ícones vetoriais — aparecem iguais em qualquer celular e funcionam offline.
 
-```js
-// js/camera.js — ligarCamera()
-} catch (erro) {
-  if (erro.name === "NotAllowedError") {
-    mostrarAviso("Você precisa permitir o uso da câmera");
-  } else {
-    mostrarAviso("Não foi possível abrir a câmera (" + erro.name + ")");
-  }
-}
+## Modo escuro
+
+Por padrão, o app segue a preferência do sistema (`prefers-color-scheme`). Se o sistema mudar de tema com o app aberto, a interface acompanha.
+
+O botão de lua/sol no topo permite escolher manualmente. A escolha é salva no `localStorage` (chave `tema`) e passa a valer também quando o app reabrir — inclusive ignorando o sistema, até que você volte a alternar.
+
+Por baixo dos panos:
+
+- `js/tema.js` define `data-tema="claro"` ou `data-tema="escuro"` no `<html>` e atualiza a meta tag `theme-color` (a cor da barra do navegador/app instalado).
+- `css/style.css` troca um conjunto de variáveis CSS (`--cor-fundo`, `--cor-card`, `--cor-texto`, etc.), então todos os componentes acompanham o tema sem duplicar regras.
+- Mesmo com JavaScript desativado, a regra `@media (prefers-color-scheme: dark)` já deixa o app escuro.
+
+## Ícones
+
+Todos os ícones ficam centralizados em `js/icones.js`, como SVGs que usam `currentColor` (herdam a cor do tema).
+
+- No HTML, use `<span data-icone="cafe"></span>`, por exemplo.
+- No JavaScript, use `icone("compartilhar")` dentro do `innerHTML`.
+- Para adicionar um ícone novo, crie uma entrada em `ICONES` com os caminhos do SVG e use o nome escolhido.
+
+## Como executar
+
+Sirva a pasta por HTTP. Por exemplo, dentro do projeto:
+
+```bash
+python -m http.server 8080
 ```
 
-**Como liberar de novo pelo cadeado:**
+Depois abra `http://localhost:8080` no navegador.
 
-1. Toque no **cadeado** (ou no ícone de ajustes) ao lado do endereço do site.
-2. Abra **Permissões** → **Câmera**.
-3. Marque **Permitir**.
-4. Recarregue a página e toque em **Ligar câmera**.
+> Câmera, instalação e Service Worker exigem **HTTPS** ou `localhost`. Abrir o `index.html` direto (`file://`) não funciona para esses recursos.
 
-> No iPhone o cadeado não existe: toque no **"aA"** da barra de endereço →
-> **Ajustes do Site** → **Câmera** → **Permitir**. Se não aparecer, use
-> **Ajustes → Safari → Câmera**. Em último caso, limpe os dados do site e recarregue.
+Para testar no celular, publique em HTTPS (o GitHub Pages serve). Com o repo neste endereço, a URL será `https://hazelbunnii.github.io/Coffee-Mobile/` após ativar **Settings → Pages → Deploy from branch → main**.
 
-![Mensagem de permissão negada](docs/img/permissao-negada.jpg)
+## Estrutura
 
----
-
-## 4.2 — Qualidade da foto
-
-**O que acontece com a galeria:** ela passa a **apagar as fotos mais antigas** antes de
-chegar ao limite de 12. Cada foto fica cerca de **12 a 15 vezes maior**, e como o
-`localStorage` tem apenas ~5 MB, só cabem de **3 a 6 fotos** em vez de 12.
-
-Pior: o aviso **"Galeria cheia: a foto mais antiga foi removida"** é sobrescrito
-imediatamente por **"📸 Foto salva na galeria"**, então o usuário não percebe que perdeu
-fotos.
-
-**Código alterado:**
-
-```js
-// js/camera.js — guardarImagem()
-// antes
-const largura = 480;
-const imagem = canvas.toDataURL("image/jpeg", 0.7);
-
-// depois
-const largura = 1080;
-const imagem = canvas.toDataURL("image/jpeg", 0.95);
+```
+index.html          telas, filtros, barra de abas e botão de tema
+css/style.css       variáveis de tema, layout claro/escuro e ícones
+js/dados.js         cardápio (nome, descrição, preço, categoria e ícone)
+js/icones.js        biblioteca de SVGs usada no lugar dos emojis
+js/tema.js          modo escuro automático + alternância manual
+js/app.js           navegação, cardápio, pedido e localStorage
+js/camera.js        câmera, fotos e galeria
+js/pwa.js           Service Worker, botão Instalar e Web Share
+manifest.json       dados do app para instalação
+sw.js               cache offline (incrementar CACHE ao mudar arquivos)
+icons/              ícones do app nas versões 192, 512 e maskable
+docs/               imagens e anotações das aulas anteriores
 ```
 
-**Por quê:**
-
-- 1080 × 810 = **~875 mil pixels**; 480 × 360 = **~173 mil** → **5× mais pixels**.
-- Qualidade 0.95 gera **2–3× mais bytes por pixel** que 0.70.
-- Juntando os dois, cada foto sai de ~30 KB para ~400 KB.
-- `toDataURL()` devolve **base64**, que é ~37% maior que o binário.
-- O `localStorage` só guarda **texto** e tem cota de **~5 MB** (no Chrome contada em
-  UTF-16, ~2 bytes por caractere) → cada foto consome perto de **1 MB** da cota.
-
----
-
-## 4.3 — Legenda
-
-A legenda é pedida com `prompt("Legenda da foto:")` antes de salvar e é exibida no
-lugar da data. Se o usuário cancelar, a foto não é salva; se deixar vazio, grava
-`"Sem legenda"`.
-
-**Código alterado:**
-
-```js
-// js/camera.js — guardarImagem()
-// antes
-fotos.unshift({ imagem: imagem, data: new Date().toLocaleString("pt-BR") });
-
-// depois
-const resposta = prompt("Legenda da foto:");
-if (resposta === null) {
-  return false; // usuário cancelou: não salva nada
-}
-const legenda = resposta.trim() || "Sem legenda";
-
-fotos.unshift({
-  imagem: imagem,
-  legenda: legenda,
-  data: new Date().toLocaleString("pt-BR")
-});
-```
-
-```js
-// js/camera.js — mostrarGaleria()
-// antes:  <small>${foto.data}</small>
-// depois
-legenda.textContent = foto.legenda || foto.data;
-```
-
-![Legenda "PC na minha frente" na galeria](docs/img/galeria-legenda-e-contador.jpg)
-
----
-
-## 4.4 — Contador de fotos
-
-O contador aparece ao lado do título e é atualizado sempre que a galeria é redesenhada.
-
-**Código alterado:**
-
-```html
-<!-- index.html -->
-<!-- antes -->
-<h3>Galeria</h3>
-
-<!-- depois -->
-<h3 id="titulo-galeria">Galeria (0)</h3>
-```
-
-```js
-// js/camera.js — mostrarGaleria()
-tituloGaleria.textContent = "Galeria (" + fotos.length + ")";
-```
-
-![Título "Galeria (4)" com as fotos](docs/img/galeria-legenda-e-contador.jpg)
+As respostas e anotações do Dia 4 foram mantidas em [docs/LEIA-ME-dia4.md](docs/LEIA-ME-dia4.md).
